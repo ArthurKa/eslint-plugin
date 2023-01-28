@@ -1,0 +1,34 @@
+{
+  "name": "eslint-plugin-arthurka",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "lint:check": "eslint --ext js,jsx,ts,tsx src",
+    "lint:fix": "npm run lint:check -- --fix",
+    "ts:noWatch": "npm run build -- --noEmit",
+    "ts": "npm run ts:noWatch -- --watch",
+    "dev": "nodemon -w src -e ts -x \"npm run build\"",
+    "prebuild": "rm -rf build/*",
+    "build": "tsc",
+    "prepare": "node -e \"try { require('husky').install(); } catch(e) { if(e.code !== 'MODULE_NOT_FOUND') throw e; }\"",
+    "pu": "git bcm && npm pu && git p && git pt"
+  },
+  "devDependencies": {
+    "@arthurka/eslint": "3.0.1",
+    "@tsconfig/node16-strictest": "^1.0.4",
+    "@types/node": "<=16.13.x",
+    "husky": "^8.0.3",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.9.4"
+  },
+  "author": {
+    "name": "ArthurKa",
+    "email": "arthur.katruk@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArthurKa/eslint-plugin/issues"
+  },
+  "homepage": "https://github.com/ArthurKa/eslint-plugin#readme"
+}

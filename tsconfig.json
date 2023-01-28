@@ -1,0 +1,24 @@
+{
+  "extends": "@tsconfig/node16-strictest/tsconfig.json",
+  "compilerOptions": {
+    "noPropertyAccessFromIndexSignature": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "resolveJsonModule": true,
+    "allowUnreachableCode": true,
+    "importsNotUsedAsValues": "remove",
+    "noImplicitOverride": false,
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": false,
+    "noImplicitReturns": false,
+    "rootDir": "src",
+    "outDir": "build",
+    "importHelpers": true,
+  },
+  "include": [
+    "src",
+  ],
+  "exclude": [
+    "node_modules",
+  ],
+}
