@@ -13,7 +13,6 @@
     "noImplicitReturns": false,
     "rootDir": "src",
     "outDir": "build",
-    "importHelpers": true,
   },
   "include": [
     "src",
