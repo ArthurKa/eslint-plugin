@@ -6,7 +6,7 @@
   "scripts": {
     "lint:check": "eslint --ext js,jsx,ts,tsx src",
     "lint:fix": "npm run lint:check -- --fix",
-    "ts:noWatch": "npm run build -- --noEmit",
+    "ts:noWatch": "tsc --noEmit",
     "ts": "npm run ts:noWatch -- --watch",
     "dev": "nodemon -w src -e ts -x \"npm run build\"",
     "prebuild": "rm -rf build/*",
