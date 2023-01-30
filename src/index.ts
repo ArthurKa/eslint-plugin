@@ -11,5 +11,11 @@ export = ((e: ESLint.Plugin) => e)({
         fixable: 'code',
       },
     },
+    'no-space-between-empty-parens': {
+      create: rules.noSpaceBetweenEmptyParens,
+      meta: {
+        fixable: 'code',
+      },
+    },
   },
 });
