@@ -17,5 +17,11 @@ export = ((e: ESLint.Plugin) => e)({
         fixable: 'code',
       },
     },
+    'no-multi-space-in-comments': {
+      create: rules.noMultiSpaceInComments,
+      meta: {
+        fixable: 'code',
+      },
+    },
   },
 });
