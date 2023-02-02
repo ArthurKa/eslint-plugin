@@ -1,10 +1,8 @@
 import { Linter } from 'eslint';
+import * as rules from './rules';
 
 export const recommended: Linter.Config = {
-  rules: {
-    'arthurka/no-space-between-empty-curlies': 'warn',
-    'arthurka/no-space-between-empty-parens': 'warn',
-    'arthurka/no-multi-space-in-comments': 'warn',
-    'arthurka/space-after-coma-in-eslint-disable-directives': 'warn',
-  },
+  rules: Object.fromEntries(
+    Object.values(rules).map(({ ruleName, ruleEntry }) => [`arthurka/${ruleName}`, ruleEntry]),
+  ),
 };

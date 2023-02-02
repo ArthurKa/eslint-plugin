@@ -1,5 +1,19 @@
-import type { AST, Rule } from 'eslint';
+import type { AST, Linter, Rule } from 'eslint';
 import type { Comment, Identifier } from 'estree';
+
+export const createPluginRule = ({
+  ruleName,
+  ruleEntry = 'warn',
+  create,
+}: {
+  ruleName: string;
+  ruleEntry?: Linter.RuleEntry;
+  create: Rule.RuleModule['create'];
+}) => ({
+  ruleName,
+  ruleEntry,
+  create,
+});
 
 export const findProgram = (node: Rule.NodeParentExtension): AST.Program | null => {
   do {
@@ -100,11 +114,11 @@ export const makeCommentsCheckRule = ({
 
         const { line, column } = loc.start;
         const rangeShift = range[0] - column;
-        // const re = new RegExp(regExp);
+        const re = new RegExp(regExp);
         let match: ReturnType<RegExp['exec']>;
 
         // eslint-disable-next-line no-cond-assign
-        while(match = regExp.exec(value)) {
+        while(match = re.exec(value)) {
           const { 0: value, index } = match;
 
           const startColumn = column + index + 2;
