@@ -1,5 +1,5 @@
 import type { AST, Rule } from 'eslint';
-import type { Identifier } from 'estree';
+import type { Comment, Identifier } from 'estree';
 
 export const findProgram = (node: Rule.NodeParentExtension): AST.Program | null => {
   do {
@@ -15,11 +15,11 @@ export const findProgram = (node: Rule.NodeParentExtension): AST.Program | null 
 
 export const makeBracketsIdentifier = ({
   ruleCtx,
-  message,
+  reportMessage,
   brackets,
 }: {
   ruleCtx: Rule.RuleContext;
-  message: string;
+  reportMessage: string;
   brackets: [string, string];
 }) => {
   const alreadyReportedProgramRanges = new Set<`${number} ${number}`>();
@@ -54,7 +54,7 @@ export const makeBracketsIdentifier = ({
           alreadyReportedProgramRanges.add(reportRange);
 
           ruleCtx.report({
-            message,
+            message: reportMessage,
             loc: {
               start: openBracket.loc.end,
               end: closeBracket.loc.start,
@@ -72,3 +72,62 @@ export const makeBracketsIdentifier = ({
     });
   };
 };
+
+export const makeCommentsCheckRule = ({
+  reportMessage,
+  regExp,
+  replaceWith,
+  skipIteration,
+}: {
+  reportMessage: string;
+  regExp: RegExp;
+  replaceWith: string;
+  skipIteration?: (comment: Comment) => boolean;
+}): Rule.RuleModule['create'] => (
+  ruleCtx => ({
+    Program(program) {
+      program.comments?.forEach(comment => {
+        const { loc, range, value } = comment;
+        if(
+          false
+            || !loc
+            || !range
+            || loc.start.line !== loc.end.line
+            || skipIteration?.(comment)
+        ) {
+          return;
+        }
+
+        const { line, column } = loc.start;
+        const rangeShift = range[0] - column;
+        // const re = new RegExp(regExp);
+        let match: ReturnType<RegExp['exec']>;
+
+        // eslint-disable-next-line no-cond-assign
+        while(match = regExp.exec(value)) {
+          const { 0: value, index } = match;
+
+          const startColumn = column + index + 2;
+          const endColumn = startColumn + value.length;
+
+          ruleCtx.report({
+            message: reportMessage,
+            loc: {
+              start: {
+                line,
+                column: startColumn,
+              },
+              end: {
+                line,
+                column: endColumn,
+              },
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange([rangeShift + startColumn, rangeShift + endColumn], replaceWith);
+            },
+          });
+        }
+      });
+    },
+  })
+);

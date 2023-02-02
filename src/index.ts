@@ -23,5 +23,11 @@ export = ((e: ESLint.Plugin) => e)({
         fixable: 'code',
       },
     },
+    'space-after-coma-in-eslint-disable-directives': {
+      create: rules.spaceAfterComaInEslintDisableDirectives,
+      meta: {
+        fixable: 'code',
+      },
+    },
   },
 });

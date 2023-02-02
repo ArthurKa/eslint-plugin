@@ -5,5 +5,6 @@ export const recommended: Linter.Config = {
     'arthurka/no-space-between-empty-curlies': 'warn',
     'arthurka/no-space-between-empty-parens': 'warn',
     'arthurka/no-multi-space-in-comments': 'warn',
+    'arthurka/space-after-coma-in-eslint-disable-directives': 'warn',
   },
 };
