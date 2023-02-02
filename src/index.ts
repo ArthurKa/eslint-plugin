@@ -5,12 +5,13 @@ import * as rules from './rules';
 export = ((e: ESLint.Plugin) => e)({
   configs,
   rules: Object.fromEntries(
-    Object.values(rules).map(({ ruleName, create }) => [
+    Object.values(rules).map(({ ruleName, create, type }) => [
       ruleName,
       ((e: Rule.RuleModule) => e)({
         create,
         meta: {
           fixable: 'code',
+          type,
         },
       }),
     ]),

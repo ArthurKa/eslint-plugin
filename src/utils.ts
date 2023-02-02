@@ -3,14 +3,17 @@ import type { Comment, Identifier } from 'estree';
 
 export const createPluginRule = ({
   ruleName,
+  type,
   ruleEntry = 'warn',
   create,
 }: {
   ruleName: string;
   ruleEntry?: Linter.RuleEntry;
+  type: NonNullable<Rule.RuleMetaData['type']>;
   create: Rule.RuleModule['create'];
 }) => ({
   ruleName,
+  type,
   ruleEntry,
   create,
 });
