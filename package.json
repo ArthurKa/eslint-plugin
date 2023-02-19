@@ -12,7 +12,7 @@
     "prebuild": "rm -rf build/*",
     "build": "tsc",
     "prepare": "node -e \"try { require('husky').install(); } catch(e) { if(e.code !== 'MODULE_NOT_FOUND') throw e; }\"",
-    "pu": "git bcm && npm pu && git p && git pt"
+    "pu": "npm run build && git bcm && npm pu && git p && git pt"
   },
   "devDependencies": {
     "@arthurka/eslint": "3.0.1",
