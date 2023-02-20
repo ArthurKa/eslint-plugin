@@ -11,6 +11,7 @@
     "dev": "nodemon -w src -e ts -x \"npm run build\"",
     "prebuild": "rm -rf build/*",
     "build": "tsc",
+    "repo-fix": "node helpers/eslint.js --fix",
     "prepare": "node -e \"try { require('husky').install(); } catch(e) { if(e.code !== 'MODULE_NOT_FOUND') throw e; }\"",
     "pu": "npm run build && git bcm && npm pu && git p && git pt"
   },

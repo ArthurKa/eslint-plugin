@@ -164,7 +164,7 @@ export const addSpaceBeforeKeyword = (keywords: string[]): Rule.RuleModule['crea
 
           const prev = arr[i - 1];
           if(!prev) {
-            throw new Error('This should never happen. g01ce5');
+            throw new Error('This should never happen. hda0b2');
           }
 
           if(prev.range[1] !== e.range[0]) {

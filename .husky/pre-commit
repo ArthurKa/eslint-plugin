@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+node helpers/eslint.js
+
 npm run lint:check -- --max-warnings 0
 npm run ts:noWatch
