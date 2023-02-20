@@ -1,7 +1,7 @@
 import { addSpaceForKeyword, createPluginRule } from '../utils';
 
 export default createPluginRule({
-  ruleName: 'space-before-keywords',
+  ruleName: 'space-after-keywords',
   type: 'layout',
-  create: addSpaceForKeyword('before', ['satisfies', 'as']),
+  create: addSpaceForKeyword('after', ['satisfies', 'as', 'type']),
 });

@@ -151,20 +151,32 @@ export const makeCommentsCheckRule = ({
 
 export function castTo<T>(e: unknown): asserts e is T {}
 
-export const addSpaceBeforeKeyword = (keywords: string[]): Rule.RuleModule['create'] => (
+export const addSpaceForKeyword = (
+  position: 'before' | 'after',
+  keywords: string[],
+): Rule.RuleModule['create'] => (
   ruleCtx => ({
     Program(program) {
       castTo<AST.Program>(program);
 
       for(const keyword of keywords) {
         program.tokens.forEach((e, i, arr) => {
-          const prev = arr[i - 1];
-          if(e.value !== keyword || prev?.range[1] !== e.range[0]) {
+          let prev = arr[i + (position === 'before' ? -1 : 1)];
+          if(e.value !== keyword || !prev) {
+            return;
+          }
+
+          if(position === 'after') {
+            // eslint-disable-next-line no-param-reassign
+            [e, prev] = [prev, e];
+          }
+
+          if(prev.range[1] !== e.range[0]) {
             return;
           }
 
           ruleCtx.report({
-            message: `There should be space before '${keyword}' keyword.`,
+            message: `There should be space ${position} '${keyword}' keyword.`,
             loc: {
               start: {
                 line: e.loc.start.line,
