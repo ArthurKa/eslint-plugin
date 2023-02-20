@@ -1,4 +1,5 @@
 export { default as noCommaBeforeSemicolon } from './no-comma-before-semicolon';
+export { default as noDuplicatesInImports } from './no-duplicates-in-imports';
 export { default as noMultiSpaceInEslintDirectives } from './no-multi-space-in-eslint-directives';
 export { default as noSpaceBetweenEmptyBrackets } from './no-space-between-empty-brackets';
 export { default as noSpaceBetweenEmptyCurlies } from './no-space-between-empty-curlies';

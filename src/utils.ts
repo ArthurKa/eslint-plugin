@@ -158,16 +158,8 @@ export const addSpaceBeforeKeyword = (keywords: string[]): Rule.RuleModule['crea
 
       for(const keyword of keywords) {
         program.tokens.forEach((e, i, arr) => {
-          if(e.value !== keyword) {
-            return;
-          }
-
           const prev = arr[i - 1];
-          if(!prev) {
-            throw new Error('This should never happen. hda0b2');
-          }
-
-          if(prev.range[1] !== e.range[0]) {
+          if(e.value !== keyword || prev?.range[1] !== e.range[0]) {
             return;
           }
 
