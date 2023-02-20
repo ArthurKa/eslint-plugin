@@ -148,3 +148,47 @@ export const makeCommentsCheckRule = ({
     },
   })
 );
+
+export function castTo<T>(e: unknown): asserts e is T {}
+
+export const addSpaceBeforeKeyword = (keywords: string[]): Rule.RuleModule['create'] => (
+  ruleCtx => ({
+    Program(program) {
+      castTo<AST.Program>(program);
+
+      for(const keyword of keywords) {
+        program.tokens.forEach((e, i, arr) => {
+          if(e.value !== keyword) {
+            return;
+          }
+
+          const prev = arr[i - 1];
+          if(!prev) {
+            throw new Error('This should never happen. g01ce5');
+          }
+
+          if(prev.range[1] !== e.range[0]) {
+            return;
+          }
+
+          ruleCtx.report({
+            message: `There should be space before '${keyword}' keyword.`,
+            loc: {
+              start: {
+                line: e.loc.start.line,
+                column: e.loc.start.column - 1,
+              },
+              end: {
+                line: e.loc.start.line,
+                column: e.loc.start.column + 1,
+              },
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange([e.range[0], e.range[0]], ' ');
+            },
+          });
+        });
+      }
+    },
+  })
+);
