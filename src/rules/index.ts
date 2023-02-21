@@ -4,6 +4,7 @@ export { default as noMultiSpaceInOneLineDirectives } from './no-multi-space-in-
 export { default as noSpaceBetweenEmptyBrackets } from './no-space-between-empty-brackets';
 export { default as noSpaceBetweenEmptyCurlies } from './no-space-between-empty-curlies';
 export { default as noSpaceBetweenEmptyParens } from './no-space-between-empty-parens';
+export { default as noSpaceInJsdocTypeCurlies } from './no-space-in-jsdoc-type-curlies';
 export { default as spaceAfterComaInEslintDirectives } from './space-after-comma-in-eslint-directives';
 export { default as spaceAfterKeywords } from './space-after-keywords';
 export { default as spaceBeforeKeywords } from './space-before-keywords';
