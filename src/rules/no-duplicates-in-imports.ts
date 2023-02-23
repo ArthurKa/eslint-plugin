@@ -23,7 +23,7 @@ export default createPluginRule({
           }
 
           ruleCtx.report({
-            message: 'There should be no dupliacate in import.',
+            message: 'There should be no duplicate in import.',
             node,
             fix(fixer) {
               if(!prev?.range) {
