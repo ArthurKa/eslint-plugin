@@ -196,3 +196,39 @@ export const addSpaceForKeyword = (
     },
   })
 );
+
+export const makeImportCheckRule = ({
+  reportMessage,
+  endsWith,
+  replaceWith,
+}: {
+  reportMessage: string;
+  endsWith: string;
+  replaceWith: string;
+}): Rule.RuleModule['create'] => (
+  ruleCtx => ({
+    ImportDeclaration(node) {
+      const { value, loc, range } = node.source;
+      if(!range || !loc || typeof value !== 'string' || !value.endsWith(endsWith)) {
+        return;
+      }
+
+      ruleCtx.report({
+        message: reportMessage,
+        loc: {
+          start: {
+            line: loc.start.line,
+            column: loc.end.column - endsWith.length - 1,
+          },
+          end: {
+            line: loc.end.line,
+            column: loc.end.column - 1,
+          },
+        },
+        fix(fixer) {
+          return fixer.replaceTextRange([range[1] - endsWith.length - 1, range[1] - 1], replaceWith);
+        },
+      });
+    },
+  })
+);
