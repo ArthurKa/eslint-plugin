@@ -1,5 +1,6 @@
 export { default as noCommaBeforeSemicolon } from './no-comma-before-semicolon';
 export { default as noDuplicatesInImports } from './no-duplicates-in-imports';
+export { default as noEmptyImports } from './no-empty-imports';
 export { default as noEndWithIndexInImports } from './no-end-with-index-in-imports';
 export { default as noMultiSpaceInOneLineDirectives } from './no-multi-space-in-one-line-directives';
 export { default as noSpaceBetweenEmptyBrackets } from './no-space-between-empty-brackets';
