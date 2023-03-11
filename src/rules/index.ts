@@ -7,6 +7,7 @@ export { default as noSpaceBetweenEmptyBrackets } from './no-space-between-empty
 export { default as noSpaceBetweenEmptyCurlies } from './no-space-between-empty-curlies';
 export { default as noSpaceBetweenEmptyParens } from './no-space-between-empty-parens';
 export { default as noSpaceInJsdocTypeCurlies } from './no-space-in-jsdoc-type-curlies';
+export { default as noSpaceInJsdocTypeImportParents } from './no-space-in-jsdoc-type-import-parents';
 export { default as noTrailingSlashInImports } from './no-trailing-slash-in-imports';
 export { default as noUnusedImports } from './no-unused-imports';
 export { default as spaceAfterComaInEslintDirectives } from './space-after-comma-in-eslint-directives';
