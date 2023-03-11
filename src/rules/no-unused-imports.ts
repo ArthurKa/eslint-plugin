@@ -34,10 +34,14 @@ export default createPluginRule({
           }
 
           const isType = (identifier as any)?.parent?.importKind === 'type';
+          const _loc = (identifier as any)?.parent?.parent?.loc;
+          const isMultiline = _loc.start.line !== _loc.end.line;
+
           const { loc, range } = identifier;
           if(!loc || !range) {
             return;
           }
+          const isLastLine = loc.end.line + 1 === _loc.end.line;
 
           ruleCtx.report({
             message: `'${name}' is defined but never used.`,
@@ -52,7 +56,13 @@ export default createPluginRule({
               },
             },
             fix(fixer) {
-              return fixer.replaceTextRange([range[0] + (isType ? -5 : 0), range[1] + 1], '');
+              const start = range[0] + (isType ? -5 : 0);
+
+              if(isLastLine) {
+                return fixer.replaceTextRange([start, range[1] + 3], '}');
+              }
+
+              return fixer.replaceTextRange([start, range[1] + (isMultiline ? 2 : 1)], '');
             },
           });
         }
