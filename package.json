@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-arthurka",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
