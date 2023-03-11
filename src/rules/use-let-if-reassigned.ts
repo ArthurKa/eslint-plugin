@@ -1,11 +1,26 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
+import path = require('path');
 import { createPluginRule } from '../utils';
 
-// eslint-disable-next-line import/no-dynamic-require
-const astUtils = require(require.resolve('eslint/lib/rules/utils/ast-utils'));
+let astUtils;
+try {
+  astUtils = require('eslint/lib/rules/utils/ast-utils');
+} catch(e) {
+  try {
+    astUtils = require(require.resolve('eslint/lib/rules/utils/ast-utils'));
+  } catch(e) {
+    try {
+      astUtils = require(path.resolve('node_modules/eslint/lib/rules/utils/ast-utils'));
+    } catch(e) {
+      astUtils = require(path.resolve('../../node_modules/eslint/lib/rules/utils/ast-utils'));
+    }
+  }
+}
 
 const PATTERN_TYPE = /^(?:.+?Pattern|RestElement|SpreadProperty|ExperimentalRestProperty|Property)$/u;
 const DECLARATION_HOST_TYPE = /^(?:Program|BlockStatement|SwitchCase)$/u;
