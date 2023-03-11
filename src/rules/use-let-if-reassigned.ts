@@ -2,9 +2,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
+import * as path from 'path';
 import { createPluginRule } from '../utils';
 
-const astUtils = require('../../node_modules/eslint/lib/rules/utils/ast-utils');
+// eslint-disable-next-line import/no-dynamic-require
+const astUtils = require(path.resolve('node_modules/eslint/lib/rules/utils/ast-utils'));
 
 const PATTERN_TYPE = /^(?:.+?Pattern|RestElement|SpreadProperty|ExperimentalRestProperty|Property)$/u;
 const DECLARATION_HOST_TYPE = /^(?:Program|BlockStatement|SwitchCase)$/u;
