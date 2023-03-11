@@ -9,19 +9,31 @@ export default createPluginRule({
     const identifiers = new Map<string, Identifier>();
 
     return {
-      ImportSpecifier({ imported }) {
-        identifiers.set(imported.name, imported);
+      ImportSpecifier({ imported, local }) {
+        if(imported.range?.[0] === void 0 || local.range?.[1] === void 0) {
+          return;
+        }
+
+        identifiers.set(local.name, {
+          ...local,
+          range: [imported.range[0], local.range[1]],
+        });
       },
-      Identifier({ name }) {
+      Identifier({ name, parent }) {
+        if(parent.type === 'ImportSpecifier') {
+          return;
+        }
+
         amounts.set(name, (amounts.get(name) ?? 0) + 1);
       },
       'Program:exit': function() {
-        for(const [name, amount] of amounts.entries()) {
-          const identifier = identifiers.get(name);
-          if(amount > 2 || !identifier) {
+        for(const [name, identifier] of identifiers.entries()) {
+          const amount = amounts.get(name) ?? 0;
+          if(amount) {
             continue;
           }
 
+          const isType = (identifier as any)?.parent?.importKind === 'type';
           const { loc, range } = identifier;
           if(!loc || !range) {
             return;
@@ -40,7 +52,7 @@ export default createPluginRule({
               },
             },
             fix(fixer) {
-              return fixer.replaceTextRange([range[0], range[1] + 1], '');
+              return fixer.replaceTextRange([range[0] + (isType ? -5 : 0), range[1] + 1], '');
             },
           });
         }
