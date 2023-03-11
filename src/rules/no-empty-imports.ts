@@ -77,6 +77,42 @@ export default createPluginRule({
             },
           });
         }
+
+        if(
+          true
+            && e.value === 'import'
+            && arr[i + 1]?.value === 'type'
+            && arr[i + 2]?.type === 'Identifier'
+            && arr[i + 3]?.value === ','
+            && arr[i + 4]?.value === '{'
+            && arr[i + 5]?.value === '}'
+            && arr[i + 6]?.value === 'from'
+            && arr[i + 7]?.type === 'String'
+        ) {
+          const start = arr[i + 3];
+          const curly = arr[i + 4];
+          const end = arr[i + 5];
+          if(!start || !end || !curly) {
+            return;
+          }
+
+          ruleCtx.report({
+            message: reportMessage,
+            loc: {
+              start: {
+                line: curly.loc.start.line,
+                column: curly.loc.start.column,
+              },
+              end: {
+                line: end.loc.end.line,
+                column: end.loc.end.column,
+              },
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange([start.range[0], end.range[1]], '');
+            },
+          });
+        }
       });
     },
   }),
