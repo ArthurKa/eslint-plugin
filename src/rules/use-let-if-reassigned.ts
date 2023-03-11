@@ -4,7 +4,7 @@
 
 import { createPluginRule } from '../utils';
 
-const astUtils = require('eslint/lib/rules/utils/ast-utils');
+const astUtils = require('../../node_modules/eslint/lib/rules/utils/ast-utils');
 
 const PATTERN_TYPE = /^(?:.+?Pattern|RestElement|SpreadProperty|ExperimentalRestProperty|Property)$/u;
 const DECLARATION_HOST_TYPE = /^(?:Program|BlockStatement|SwitchCase)$/u;
