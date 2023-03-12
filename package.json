@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@arthurka/eslint": "3.0.1",
+    "@total-typescript/ts-reset": "0.4.2",
     "@tsconfig/node16-strictest": "^1.0.4",
     "@types/node": "<=16.13.x",
     "husky": "^8.0.3",

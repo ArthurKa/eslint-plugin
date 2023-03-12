@@ -1,11 +1,11 @@
 import type { Identifier } from 'estree';
-import { createPluginRule } from '../utils';
+import type { Rule } from 'eslint';
+import { castTo, createPluginRule } from '../utils';
 
 export default createPluginRule({
   ruleName: 'no-unused-imports',
   type: 'suggestion',
   create: ruleCtx => {
-    const amounts = new Map<string, number>();
     const identifiers = new Map<string, Identifier>();
 
     return {
@@ -19,17 +19,26 @@ export default createPluginRule({
           range: [imported.range[0], local.range[1]],
         });
       },
-      Identifier({ name, parent }) {
-        if(parent.type === 'ImportSpecifier') {
+      'Program:exit': (program => {
+        const comments = program.comments?.map(e => e.value).join('\n') ?? '';
+
+        if(!('tokens' in program) || !Array.isArray(program.tokens)) {
           return;
         }
 
-        amounts.set(name, (amounts.get(name) ?? 0) + 1);
-      },
-      'Program:exit': function() {
+        castTo<Array<{ value: string }>>(program.tokens);
+
         for(const [name, identifier] of identifiers.entries()) {
-          const amount = amounts.get(name) ?? 0;
-          if(amount) {
+          let amount = 0;
+
+          try {
+            amount += comments.match(new RegExp(`\\b${name}\\b`, 'g'))?.length ?? 0;
+            amount += program.tokens.reduce((acc, { value }) => acc + +(value === name), 0);
+          } catch(e) {
+            continue;
+          }
+
+          if(amount > 1) {
             continue;
           }
 
@@ -66,7 +75,7 @@ export default createPluginRule({
             },
           });
         }
-      },
+      }) satisfies Rule.NodeListener['Program'],
     };
   },
 });
