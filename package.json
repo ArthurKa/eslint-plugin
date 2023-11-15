@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-arthurka",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "main": "build/index.js",
   "scripts": {
     "lint:check": "eslint --ext js,jsx,ts,tsx src",
