@@ -246,26 +246,43 @@ export const createAsyncAwaitBound = () => {
   const awaitPairFunctions = new Set<FunctionNode>();
   const allFunctions = new Set<FunctionNode>();
 
+  const registerAllFunction = (node: FunctionNode) => allFunctions.add(node);
+  const registerAwaitPairFunction = (node: Rule.NodeParentExtension) => {
+    let funcNode = node.parent as typeof node.parent | null;
+
+    while(funcNode && funcNode.type !== 'ArrowFunctionExpression' && funcNode.type !== 'FunctionDeclaration' && funcNode.type !== 'FunctionExpression') {
+      funcNode = funcNode.parent;
+    }
+
+    if(!funcNode) {
+      return;
+    }
+
+    awaitPairFunctions.add(funcNode);
+  };
+
   return {
     awaitPairFunctions,
     allFunctions,
     ruleListeners: {
-      ArrowFunctionExpression: node => allFunctions.add(node),
-      FunctionExpression: node => allFunctions.add(node),
-      FunctionDeclaration: node => allFunctions.add(node),
-      AwaitExpression(node) {
-        let funcNode = node.parent as typeof node.parent | null;
-
-        while(funcNode && funcNode.type !== 'ArrowFunctionExpression' && funcNode.type !== 'FunctionDeclaration' && funcNode.type !== 'FunctionExpression') {
-          funcNode = funcNode.parent;
+      ArrowFunctionExpression: registerAllFunction,
+      FunctionExpression: registerAllFunction,
+      FunctionDeclaration: registerAllFunction,
+      AwaitExpression: registerAwaitPairFunction,
+      Identifier(node) {
+        if(node.name === 'await') {
+          registerAwaitPairFunction(node);
         }
-
-        if(!funcNode) {
-          return;
-        }
-
-        awaitPairFunctions.add(funcNode);
       },
     } satisfies ReturnType<Parameters<typeof createPluginRule>[0]['create']>,
+    getParams({ parent, type, async: isAsync, ...rest }: FunctionNode) {
+      const { loc, range } = type === 'FunctionExpression' && parent?.type === 'Property' ? parent : rest;
+
+      return isAsync === void 0 || !loc || !range ? null : {
+        loc,
+        range,
+        isAsync,
+      };
+    },
   };
 };

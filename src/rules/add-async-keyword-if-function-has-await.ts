@@ -5,14 +5,14 @@ export default createPluginRule({
   type: 'problem',
   ruleEntry: 'error',
   create: ruleCtx => {
-    const { ruleListeners, awaitPairFunctions } = createAsyncAwaitBound();
+    const { ruleListeners, awaitPairFunctions, getParams } = createAsyncAwaitBound();
 
     return {
       ...ruleListeners,
       'Program:exit': () => {
-        for(const { async, parent, type, ...rest } of awaitPairFunctions) {
-          const { loc, range } = type === 'FunctionExpression' && parent?.type === 'Property' ? parent : rest;
-          if(async !== false || !loc || !range) {
+        for(const functionNode of awaitPairFunctions) {
+          const params = getParams(functionNode);
+          if(!params || params.isAsync) {
             continue;
           }
 
@@ -20,16 +20,16 @@ export default createPluginRule({
             message: "Only async function can have 'await' expression.",
             loc: {
               start: {
-                line: loc.start.line,
-                column: loc.start.column - 1,
+                line: params.loc.start.line,
+                column: params.loc.start.column - 1,
               },
               end: {
-                line: loc.start.line,
-                column: loc.start.column + 1,
+                line: params.loc.start.line,
+                column: params.loc.start.column + 1,
               },
             },
             fix(fixer) {
-              return fixer.replaceTextRange([range[0], range[0]], 'async ');
+              return fixer.replaceTextRange([params.range[0], params.range[0]], 'async ');
             },
           });
         }
