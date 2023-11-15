@@ -1,3 +1,4 @@
+export { default as addAsyncKeywordIfFunctionHasAwait } from './add-async-keyword-if-function-has-await';
 export { default as noCommaBeforeSemicolon } from './no-comma-before-semicolon';
 export { default as noDuplicatesInImports } from './no-duplicates-in-imports';
 export { default as noEmptyImports } from './no-empty-imports';
@@ -10,6 +11,7 @@ export { default as noSpaceInJsdocTypeCurlies } from './no-space-in-jsdoc-type-c
 export { default as noSpaceInJsdocTypeImportParents } from './no-space-in-jsdoc-type-import-parents';
 export { default as noTrailingSlashInImports } from './no-trailing-slash-in-imports';
 export { default as noUnusedImports } from './no-unused-imports';
+export { default as removeAsyncKeywordIfNoAwait } from './remove-async-keyword-if-no-await';
 export { default as spaceAfterComaInEslintDirectives } from './space-after-comma-in-eslint-directives';
 export { default as spaceAfterKeywords } from './space-after-keywords';
 export { default as spaceBeforeKeywords } from './space-before-keywords';

@@ -1,5 +1,5 @@
 import type { AST, Linter, Rule } from 'eslint';
-import type { Comment, Identifier } from 'estree';
+import type { ArrowFunctionExpression, Comment, FunctionDeclaration, FunctionExpression, Identifier } from 'estree';
 
 export const createPluginRule = ({
   ruleName,
@@ -232,3 +232,40 @@ export const makeImportCheckRule = ({
     },
   })
 );
+
+export const createAsyncAwaitBound = () => {
+  type FunctionNode = (
+    & Rule.NodeParentExtension
+    & (
+      | ArrowFunctionExpression
+      | FunctionExpression
+      | FunctionDeclaration
+    )
+  );
+
+  const awaitPairFunctions = new Set<FunctionNode>();
+  const allFunctions = new Set<FunctionNode>();
+
+  return {
+    awaitPairFunctions,
+    allFunctions,
+    ruleListeners: {
+      ArrowFunctionExpression: node => allFunctions.add(node),
+      FunctionExpression: node => allFunctions.add(node),
+      FunctionDeclaration: node => allFunctions.add(node),
+      AwaitExpression(node) {
+        let funcNode = node.parent as typeof node.parent | null;
+
+        while(funcNode && funcNode.type !== 'ArrowFunctionExpression' && funcNode.type !== 'FunctionDeclaration' && funcNode.type !== 'FunctionExpression') {
+          funcNode = funcNode.parent;
+        }
+
+        if(!funcNode) {
+          return;
+        }
+
+        awaitPairFunctions.add(funcNode);
+      },
+    } satisfies ReturnType<Parameters<typeof createPluginRule>[0]['create']>,
+  };
+};
