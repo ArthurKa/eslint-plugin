@@ -250,7 +250,13 @@ export const createAsyncAwaitBound = () => {
   const registerAwaitPairFunction = (node: Rule.NodeParentExtension) => {
     let funcNode = node.parent as typeof node.parent | null;
 
-    while(funcNode && funcNode.type !== 'ArrowFunctionExpression' && funcNode.type !== 'FunctionDeclaration' && funcNode.type !== 'FunctionExpression') {
+    while(
+      true
+        && funcNode
+        && funcNode.type !== 'ArrowFunctionExpression'
+        && funcNode.type !== 'FunctionDeclaration'
+        && funcNode.type !== 'FunctionExpression'
+    ) {
       funcNode = funcNode.parent;
     }
 
@@ -276,7 +282,17 @@ export const createAsyncAwaitBound = () => {
       },
     } satisfies ReturnType<Parameters<typeof createPluginRule>[0]['create']>,
     getParams({ parent, type, async: isAsync, ...rest }: FunctionNode) {
-      const { loc, range } = type === 'FunctionExpression' && parent?.type === 'Property' ? parent : rest;
+      const { loc, range } = (
+        true
+          && type === 'FunctionExpression'
+          && (
+            false
+              || parent?.type === 'Property' && parent.method
+              || parent?.type === 'MethodDefinition'
+          )
+      )
+        ? parent
+        : rest;
 
       return isAsync === void 0 || !loc || !range ? null : {
         loc,

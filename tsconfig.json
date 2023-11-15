@@ -16,7 +16,7 @@
     "types": [
       "@total-typescript/ts-reset",
       "@types/node",
-    ]
+    ],
   },
   "include": [
     "src",
